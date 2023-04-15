@@ -1,4 +1,5 @@
 module Uebung01 where
+import GHC.Base (VecElem(Int16ElemRep))
    -- import Prelude hiding (++)
 
 
@@ -60,3 +61,24 @@ pascal r p
     | p >  r    = 0
     | otherwise =  pascal (r - 1) (p - 1) + pascal (r - 1) p 
 
+
+
+{-
+#######################
+3
+#######################
+-}
+
+-- integer square root (binary search)
+intSqrt :: Int -> Int
+intSqrt n
+    | n <= 0 = 0
+    | otherwise = approx 0 (n `div` 2 + 1)
+        where approx :: Int -> Int -> Int
+              approx min max
+                | min > max = max
+                | mid * mid <= n = approx (mid + 1) max
+                | otherwise = approx min (mid - 1)
+                where mid = (min + max) `div` 2 
+
+    
