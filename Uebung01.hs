@@ -55,10 +55,8 @@ binom n k = div (fac n) (fac k * fac(n - k))
 
 pascal :: Int -> Int -> Int
 pascal r p
-    | p == r    = 1
-    | p == 0    = 1
-    | p <  0    = 0
-    | p >  r    = 0
+    | p == r || p == 0  = 1
+    | p <  0 || p > r   = 0
     | otherwise =  pascal (r - 1) (p - 1) + pascal (r - 1) p 
 
 
