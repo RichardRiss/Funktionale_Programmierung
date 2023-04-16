@@ -1,6 +1,7 @@
 module Uebung01 where
 import GHC.Base (VecElem(Int16ElemRep))
 import GHC.Exts.Heap (GenClosure(FloatClosure))
+import Text.Read (Lexeme(String))
    -- import Prelude hiding (++)
 
 
@@ -88,3 +89,69 @@ approachSqrt n d = approachSqrt' n (n/2 + 1) d
           approachSqrt' n a d
             | abs(a - n/a) < d = a
             | otherwise = approachSqrt' n ((a + n/a) / 2) d
+
+
+
+{-
+#######################
+4
+activate Benchmark with :set +s
+#######################
+-}
+
+
+-- char at position x in List
+charAt :: String -> Int -> Char
+charAt s c
+    | c+1 > length s = error "Exception! Index too large." 
+    | otherwise = last (take (c+1) s)
+
+
+-- rebuild take
+initialString :: Int -> String -> String
+initialString c s
+    | length s <= c = s
+    | otherwise = initialString c (init s) 
+
+
+-- build Substring
+--           String -> StartPos -> Length
+subString :: String -> Int -> Int -> String
+subString s n m = subString' n (take (n + m) s)
+    where subString' :: Int -> String -> String
+          subString' i ss
+            | i == 0 = ss
+            | otherwise = subString' (i - 1) (tail ss)
+
+
+
+-- reverse list with O(n^2)
+-- reverse1 (replicate 10 'a') -> (0.01 secs, 69,984 bytes)
+-- reverse1 (replicate 10000 'a') -> (1.86 secs, 4,303,962,264 bytes)
+reverse1 :: [a] -> [a]
+reverse1 []      = [] 
+reverse1 (x:xs)  = reverse1 xs ++ [x]
+
+-- reverse list with O(n)
+-- use cons operator (:) to prepend to list
+-- reverse2 (replicate 10 'a') -> (0.00 secs, 67,768 bytes)
+-- reverse2 (replicate 10000 'a') -> (0.32 secs, 11,736,088 bytes)
+reverse2 :: [a] -> [a]
+reverse2 x = acc x []
+    where acc :: [a] -> [a] -> [a]
+          acc []     xss  = xss
+          acc (x:xs) xss = acc xs (x:xss) 
+
+
+-- index of first element in list of Int
+indexOf :: [Int] -> Int -> Maybe Int
+indexOf x c = indexOf' x c 0
+    where indexOf' :: [Int] -> Int -> Int -> Maybe Int
+          indexOf' [] _ _ = Nothing
+          indexOf' (x:xs) c i
+            | x == c    = Just i
+            | otherwise = indexOf' xs c (i+1) 
+
+
+
+
