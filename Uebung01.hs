@@ -144,6 +144,7 @@ reverse2 x = acc x []
 
 
 -- index of first element in list of Int
+-- Maybe a = Just a | Nothing
 indexOf :: [Int] -> Int -> Maybe Int
 indexOf x c = indexOf' x c 0
     where indexOf' :: [Int] -> Int -> Int -> Maybe Int
