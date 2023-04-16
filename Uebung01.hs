@@ -1,5 +1,6 @@
 module Uebung01 where
 import GHC.Base (VecElem(Int16ElemRep))
+import GHC.Exts.Heap (GenClosure(FloatClosure))
    -- import Prelude hiding (++)
 
 
@@ -55,8 +56,8 @@ binom n k = div (fac n) (fac k * fac(n - k))
 
 pascal :: Int -> Int -> Int
 pascal r p
+    | p <  0 || r < 0 ||  p > r   = 0
     | p == r || p == 0  = 1
-    | p <  0 || p > r   = 0
     | otherwise =  pascal (r - 1) (p - 1) + pascal (r - 1) p 
 
 
@@ -79,4 +80,11 @@ intSqrt n
                 | otherwise = approx min (mid - 1)
                 where mid = (min + max) `div` 2 
 
-    
+
+-- approach square root for float values with deviation (babylonian method)
+approachSqrt :: Float -> Float -> Float
+approachSqrt n d = approachSqrt' n (n/2 + 1) d
+    where approachSqrt' :: Float -> Float -> Float -> Float
+          approachSqrt' n a d
+            | abs(a - n/a) < d = a
+            | otherwise = approachSqrt' n ((a + n/a) / 2) d
