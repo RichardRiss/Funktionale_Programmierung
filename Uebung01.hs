@@ -2,6 +2,7 @@ module Uebung01 where
 import GHC.Base (VecElem(Int16ElemRep))
 import GHC.Exts.Heap (GenClosure(FloatClosure))
 import Text.Read (Lexeme(String))
+import System.Win32 (xBUTTON1)
    -- import Prelude hiding (++)
 
 
@@ -154,5 +155,21 @@ indexOf x c = indexOf' x c 0
             | otherwise = indexOf' xs c (i+1) 
 
 
+-- recoursive version of init and tail
+-- inits:  [1,2] -> [[],[1],[1,2]]
+-- tails:  [1,2] -> [[1,2][2],[]]
+inits, tails :: [a] -> [[a]]
+inits x = inits' [] x
+    where inits' :: [a] -> [a] -> [[a]]
+          inits' l  []     = [l]
+          inits' l (x:xs)  = l : inits' (l ++ [x]) xs
+
+tails x = tails' x 
+    where tails' :: [a] -> [[a]]
+          tails' []           = [[]]
+          tails' (x:xs)       = (x:xs) :  tails' xs
 
 
+-- new list with permuttations of lists with inserted element
+-- insert 1 [2,3] ->  [[1,2,3],[2,1,3],[2,3,1]]
+insert :: a -> [a] -> [[a]]
