@@ -170,6 +170,33 @@ tails x = tails' x
           tails' (x:xs)       = (x:xs) :  tails' xs
 
 
--- new list with permuttations of lists with inserted element
+-- new list with permutations of lists with inserted element
 -- insert 1 [2,3] ->  [[1,2,3],[2,1,3],[2,3,1]]
 insert :: a -> [a] -> [[a]]
+insert i list = [insertAt i pos list | pos <- [0..length list]]
+
+insertAt :: a -> Int -> [a] -> [a]
+insertAt elem 0 x      = elem : x
+insertAt elem i (x:xs) = x: insertAt elem (i-1) xs
+
+
+
+-- give permutations of input list
+-- take first element of list, insert it into permutations of remaining parts of the list
+
+-- to fix
+perms :: [a] -> [[a]]
+perms [] = [[]]
+perms (x:xs) = concatMap (insertAll x) (perms xs)
+
+insertAll :: a -> [[a]] -> [[a]]
+insertAll x [] = [[x]]
+insertAll x (y:ys) = ((x:y) ++ ys) : map (y:) (insertAll x ys)
+
+
+-- working
+permutations [] = [[]]
+permutations xs = [ y : ps | (y,ys) <- selections xs, ps <- permutations ys]
+
+selections []     = []
+selections (x:xs) = (x,xs) : [(y,x:ys) | (y,ys) <- selections xs]
