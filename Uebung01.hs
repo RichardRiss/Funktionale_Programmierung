@@ -198,3 +198,77 @@ perms (x:xs) = [zs | ys <- perms xs, zs <- insertAll x ys]
 insertAll :: a -> [a] -> [[a]]
 insertAll x []     = [[x]]
 insertAll x (y:ys) = (x:y:ys) : map (y:) (insertAll x ys)
+
+
+
+
+{-
+#######################
+5
+Blackjack
+#######################
+-}
+
+-- Create Suits, Rank and Card values
+-- deriving creates the called typeclasses (e.q. Eq, Show) automatically
+-- show with myCard = Card Hearts Five
+data Suit = Hearts | Diamonds | Clubs | Spades
+  deriving (Eq)
+
+instance Show Suit where  
+    show s = case s of
+        Spades   -> "♠"
+        Hearts   -> "♥"
+        Diamonds -> "♦"
+        Clubs    -> "♣"
+
+
+
+data Rank = Two | Three | Four | Five | Six | Seven 
+                | Eight | Nine | Ten | Jack | Queen | King | Ace
+  deriving (Show, Eq, Ord)
+
+data Card = Card Rank Suit
+  deriving (Eq)
+  
+instance Show Card where
+  show (Card r s) = show r ++ show s
+
+
+-- get Value of Card in Blackjack (Ace counts as 11)
+getCardValue :: Card -> Int
+getCardValue (Card rank _) = case rank of
+    Two     -> 2
+    Three   -> 3
+    Four    -> 4
+    Five    -> 5
+    Six     -> 6
+    Seven   -> 7
+    Eight   -> 8
+    Nine    -> 9
+    Ten     -> 10
+    Jack    -> 10
+    Queen   -> 10
+    King    -> 10
+    Ace     -> 11
+    
+
+-- define Hand
+-- Hand can be empty or combination of Card + remaining cards
+-- implement function (<+>) to combine two hands
+data Hand = Empty | Add Card Hand
+    deriving(Eq)
+    
+instance Show Hand where
+    show Empty = ""
+    show (Add card hand) = show card ++ " " ++ show hand
+
+(<+>) :: Hand -> Hand -> Hand
+(<+>) Empty hand2 = hand2
+(<+>) hand1 Empty = hand1
+(<+>) hand1 (Add c hand2) = Add c (hand1 <+> hand2)  
+
+
+
+
+
