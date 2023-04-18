@@ -183,20 +183,18 @@ insertAt elem i (x:xs) = x: insertAt elem (i-1) xs
 
 -- give permutations of input list
 -- take first element of list, insert it into permutations of remaining parts of the list
-
--- to fix
-perms :: [a] -> [[a]]
-perms [] = [[]]
-perms (x:xs) = concatMap (insertAll x) (perms xs)
-
-insertAll :: a -> [[a]] -> [[a]]
-insertAll x [] = [[x]]
-insertAll x (y:ys) = ((x:y) ++ ys) : map (y:) (insertAll x ys)
-
-
--- working
+{-
 permutations [] = [[]]
 permutations xs = [ y : ps | (y,ys) <- selections xs, ps <- permutations ys]
 
 selections []     = []
 selections (x:xs) = (x,xs) : [(y,x:ys) | (y,ys) <- selections xs]
+
+-}
+perms :: [a] -> [[a]]
+perms []     = [[]]
+perms (x:xs) = [zs | ys <- perms xs, zs <- insertAll x ys]
+
+insertAll :: a -> [a] -> [[a]]
+insertAll x []     = [[x]]
+insertAll x (y:ys) = (x:y:ys) : map (y:) (insertAll x ys)
