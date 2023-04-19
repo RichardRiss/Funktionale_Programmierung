@@ -1,9 +1,18 @@
 module Uebung01 where
 import GHC.Base (VecElem(Int16ElemRep))
 import GHC.Exts.Heap (GenClosure(FloatClosure))
-import Text.Read (Lexeme(String))
+import Text.Read (Lexeme(String), get)
 import System.Win32 (xBUTTON1)
    -- import Prelude hiding (++)
+
+{-
+Set λ as prompt symbol
+:set prompt  "λ: "
+
+Set Codepage to not fail on Unicode symbols (set outside ghci)
+chcp.com 65001
+
+-}
 
 
 {-
@@ -209,65 +218,85 @@ Blackjack
 #######################
 -}
 
+-- 1
 -- Create Suits, Rank and Card values
 -- deriving creates the called typeclasses (e.q. Eq, Show) automatically
 -- show with myCard = Card Hearts Five
 data Suit = Hearts | Diamonds | Clubs | Spades
-  deriving (Eq)
-
-instance Show Suit where  
-    show s = case s of
-        Spades   -> "♠"
-        Hearts   -> "♥"
-        Diamonds -> "♦"
-        Clubs    -> "♣"
+  deriving (Read,  Show, Enum, Eq)
 
 
 
 data Rank = Two | Three | Four | Five | Six | Seven 
                 | Eight | Nine | Ten | Jack | Queen | King | Ace
-  deriving (Show, Eq, Ord)
+  deriving (Read,  Show, Enum, Eq, Ord)
 
-data Card = Card Rank Suit
-  deriving (Eq)
-  
+data Card = Card {rank :: Rank,
+                  suit  :: Suit}
+    deriving(Read, Eq)
+    
+
 instance Show Card where
-  show (Card r s) = show r ++ show s
+  show (Card value rank) = show value ++ " of " ++ show rank
 
-
+-- 2
 -- get Value of Card in Blackjack (Ace counts as 11)
 getCardValue :: Card -> Int
 getCardValue (Card rank _) = case rank of
-    Two     -> 2
-    Three   -> 3
-    Four    -> 4
-    Five    -> 5
-    Six     -> 6
-    Seven   -> 7
-    Eight   -> 8
-    Nine    -> 9
-    Ten     -> 10
     Jack    -> 10
     Queen   -> 10
     King    -> 10
     Ace     -> 11
+    _       -> fromEnum rank + 2
     
 
+-- 3
 -- define Hand
 -- Hand can be empty or combination of Card + remaining cards
 -- implement function (<+>) to combine two hands
-data Hand = Empty | Add Card Hand
-    deriving(Eq)
+-- has to use newtype because new definition from Card is created
+newtype Hand = Hand [Card]
+  deriving (Show, Eq)
     
-instance Show Hand where
-    show Empty = ""
-    show (Add card hand) = show card ++ " " ++ show hand
 
 (<+>) :: Hand -> Hand -> Hand
-(<+>) Empty hand2 = hand2
-(<+>) hand1 Empty = hand1
-(<+>) hand1 (Add c hand2) = Add c (hand1 <+> hand2)  
+(<+>) (Hand cards1) (Hand cards2) = Hand (cards1 ++ cards2)  
 
+
+-- 4
+-- fullDeck function
+fullDeck :: Hand
+fullDeck = Hand [Card rank suit |rank <- [Two .. Ace], suit <- [Hearts .. Spades]]
+
+-- Get number of Aces from Hand
+numOfAces :: Hand -> Int
+numOfAces (Hand cards) = length [card | card <- cards, rank card == Ace ]
+
+-- value of Cards in Hand
+-- Write Function to getValue of Cards in Hand 
+getValue :: Hand -> Int
+getValue (Hand cards) =
+  let val = sum[getCardValue card |card <- cards]
+      ace = numOfAces (Hand cards)
+      in 
+      if val <= 21 then 
+        val
+      else
+        minmax val ace
+
+minmax :: Int -> Int -> Int
+minmax val ace |  val<=21 || ace == 0 = val
+minmax val ace                        = minmax (val - 10) (ace - 1)
+
+
+-- test
+{-
+c1 = Card Ace Hearts
+c2 = Card Ace Spades
+c3 = Two Diamonds
+hand = Hand [c1,c2,c3]
+λ: 14
+-}
 
 
 
