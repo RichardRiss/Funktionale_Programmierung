@@ -1,0 +1,36 @@
+module Uebung01_01 where
+   -- import Prelude hiding (++)
+
+{-
+Set λ as prompt symbol
+:set prompt  "λ: "
+
+Set Codepage to not fail on Unicode symbols (set outside ghci)
+chcp.com 65001
+
+-}
+
+
+{-
+#######################
+1
+#######################
+-}
+-- sum of natural numbers with gaussian sum formula
+intSum1 :: Int -> Int
+intSum1 n = div(n^2 + n) 2
+
+
+-- sum of natural numbers with recursion
+intSum2 :: Int -> Int
+intSum2 0 = 0
+intSum2 n = n + intSum2(n - 1)
+
+
+-- sum of natural numbers with accumulator
+intSum3 :: Integer -> Integer
+intSum3 n = intSum3' n 0
+--                    InputNumber -> Accumulator -> result
+    where   intSum3' :: Integer -> Integer -> Integer
+            intSum3' 0 c = c
+            intSum3' n c = intSum3' (n - 1) (c + n)
