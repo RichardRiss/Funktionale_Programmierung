@@ -1,5 +1,4 @@
 module Uebung01 where
-import Distribution.Fields (SectionArg(SecArgName))
    -- import Prelude hiding (++)
 
 {-
@@ -397,3 +396,5 @@ tree = Node
             (Node Empty 6 Empty) 
             7 
             (Node Empty 8 Empty))
+
+
