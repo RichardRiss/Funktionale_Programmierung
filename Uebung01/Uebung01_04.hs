@@ -32,7 +32,7 @@ subString s n m = subString' n (take (n + m) s)
 
 
 
--- reverse list with O(n^2)
+-- reverse list with O(n^2) 
 -- reverse1 (replicate 10 'a') -> (0.01 secs, 69,984 bytes)
 -- reverse1 (replicate 10000 'a') -> (1.86 secs, 4,303,962,264 bytes)
 reverse1 :: [a] -> [a]
@@ -95,8 +95,8 @@ permutations xs = [ y : ps | (y,ys) <- selections xs, ps <- permutations ys]
 
 selections []     = []
 selections (x:xs) = (x,xs) : [(y,x:ys) | (y,ys) <- selections xs]
-
 -}
+
 perms :: [a] -> [[a]]
 perms []     = [[]]
 perms (x:xs) = [zs | ys <- perms xs, zs <- insertAll x ys]
@@ -104,5 +104,3 @@ perms (x:xs) = [zs | ys <- perms xs, zs <- insertAll x ys]
 insertAll :: a -> [a] -> [[a]]
 insertAll x []     = [[x]]
 insertAll x (y:ys) = (x:y:ys) : map (y:) (insertAll x ys)
-
-

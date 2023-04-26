@@ -1,5 +1,4 @@
 module Uebung01_01 where
-   -- import Prelude hiding (++)
 
 {-
 Set λ as prompt symbol
@@ -28,9 +27,9 @@ intSum2 n = n + intSum2(n - 1)
 
 
 -- sum of natural numbers with accumulator
-intSum3 :: Integer -> Integer
-intSum3 n = intSum3' n 0
+intSum3 :: Int -> Int
+intSum3 = intSum3' 0
 --                    InputNumber -> Accumulator -> result
-    where   intSum3' :: Integer -> Integer -> Integer
-            intSum3' 0 c = c
-            intSum3' n c = intSum3' (n - 1) (c + n)
+    where   intSum3' :: Int -> Int -> Int
+            intSum3' c 0  = c
+            intSum3' c n  = intSum3' (c + n) (n - 1)

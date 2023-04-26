@@ -38,14 +38,14 @@ instance Show a => Show (SearchTree a) where
 
 
 -- insert Number into Tree
-inserT :: Ord a => SearchTree a -> a -> SearchTree a
-inserT Empty x = Node Empty x Empty
-inserT (Node t1 i t2) x
+insert :: Ord a => SearchTree a -> a -> SearchTree a
+insert Empty x = Node Empty x Empty
+insert (Node t1 i t2) x
   | x == i = Node t1 i t2
   -- if smaller go left
-  | x < i  = Node (inserT t1 x) i t2
+  | x < i  = Node (insert t1 x) i t2
   -- if bigger go right
-  | x > i  = Node t1 i (inserT t2 x)
+  | x > i  = Node t1 i (insert t2 x)
 
 
 -- check if Element in Tree
