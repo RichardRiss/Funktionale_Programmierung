@@ -48,10 +48,12 @@ module Uebung02_03 where
 
     -- variation 2 (nested)
     mult2 = \x y z -> mult2' (mult2' x y) z
-    mult2' =  \x y -> x * y
+        where mult2' =  \x y -> x * y
 
     -- variation 3
-    --mult3 = (*) . (*) . id
+    mult3 = \x -> \y -> \z -> (x * y) * z
+
+    
 
 
     
