@@ -52,8 +52,3 @@ module Uebung02_03 where
 
     -- variation 3
     mult3 = \x -> \y -> \z -> (x * y) * z
-
-    
-
-
-    
