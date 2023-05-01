@@ -72,15 +72,25 @@ foldObjects f acc ((k,v): xs) = foldObjects f (foldJSON f acc v) xs
 
 
 
-{-
-countStr :: Int -> JSON -> Int
-countStr acc JNull = acc
-countStr acc (JBool _) = acc
-countStr acc (JInt _) = acc
-countStr acc (JFloat _) = acc
-countStr acc (JString _) = acc + 1
-countStr acc (JArray xs) = foldJSON countStr acc (JArray xs)
-countStr acc (JObject pairs) = foldr (\(_,v) acc -> countStr acc v) acc pairs
--}
+-- | Pretty print a JSON value
+prettyJSON :: JSON -> String
+prettyJSON JNull       = "null"
+prettyJSON (JBool   b) = if b then "true" else "false"
+prettyJSON (JInt    i) = show i
+prettyJSON (JFloat  f) = show f
+prettyJSON (JString s) = '\"' : s ++ "\""
+prettyJSON (JArray  a) = '[' : commaSep (map prettyJSON a) ++ "]"
+prettyJSON (JObject o) = '{' : commaSep (map prettyKV o) ++ "}"
+  where
+    prettyKV (k, v) = '\"' : k ++ "\": " ++ prettyJSON v
 
--- foldJSON countStr 0 testData
+-- | Transform a list of strings into a comma separated string
+commaSep :: [String] -> String
+commaSep [] = ""
+commaSep s  = foldr1 (\s1 s2 -> s1 ++ ", " ++ s2) s
+
+
+-- implement prettyJSON with use of foldJSON
+-- foldJSON :: (a -> JSON -> a) -> a -> JSON -> a
+pretty = foldJSON (\acc j -> acc ++ prettyJSON j) ""
+
