@@ -18,10 +18,7 @@ module Uebung02_04 where
     -- concatMap (take 3) [[1..], [10,11], [100..]] = [1,2,3,10,11,100,101,102]
     concatMap :: (a -> [b]) -> [a] -> [b]
     concatMap _ [] = []
-    concatMap f (x:xs) = concatMap' (f x) ++ concatMap f xs
-        where concatMap' :: [b] -> [b]
-              concatMap' [] = []
-              concatMap' (x:xs) = x : concatMap' xs
+    concatMap f (x:xs) = f x ++ concatMap f xs
 
 
     
@@ -86,4 +83,5 @@ module Uebung02_04 where
 #######################
 -}
     zip :: [a] -> [b] -> [(a, b)]
-    zip (x:xs) (y:ys) = zipWith (\x y -> (x,y)) xs ys
+    --zip (x:xs) (y:ys) = zipWith (\x y -> (x,y)) xs ys
+    zip = zipWith(,) 

@@ -27,9 +27,10 @@ module Uebung02_02 where
 
     -- List of Maybe values to list of Just values
     catMaybes1 :: [Maybe a] -> [a]
+    catMaybes1 []             = [] 
     catMaybes1 ((Just x):xs)  = x : catMaybes1 xs
     catMaybes1 (Nothing : xs) = catMaybes1 xs
-    catMaybes1 []             = []  
+ 
 
     catMaybes2 :: [Maybe a] -> [a]
     catMaybes2 x = case x of
@@ -77,32 +78,30 @@ module Uebung02_02 where
 
 
 
-
-
-
     -- Left to one list, Right to other List
     partitionEithers1 :: [Either a b] -> ([a], [b])
-    partitionEithers1 x = (lefts1 x, rights1 x)
-    
-    -- helper function
-    rights1 :: [Either a b] -> [b]
-    rights1 []                 = []
-    rights1 (Left _  : rest)   = rights1 rest 
-    rights1 (Right x : rest)   = x : rights1 rest
+    partitionEithers1 []                 = ([],[])
+    partitionEithers1 (Left  x:xs)       = (x:l, r)
+        where (l,r) = partitionEithers1 xs
+    partitionEithers1 (Right x:xs)       = (l, x:r) 
+        where (l,r) = partitionEithers1 xs
 
+       
 
 
     partitionEithers2 :: [Either a b] -> ([a], [b])
-    partitionEithers2 xs = (lefts2 xs, rights2 xs)
+    partitionEithers2 x             = 
+        case x of
+            []                          -> ([],[])
+            (Left x  : rest)            -> (x:l, r)
+            (Right x : rest)            -> (l, x:r) 
+            
+            where 
+                (l,r) = partitionEithers2 (tail x)
 
-    -- helper function
-    rights2 :: [Either a b] -> [b]
-    rights2 x = case x of
-        []               -> []
-        (Left _  : rest) -> rights2 rest
-        (Right x : rest) -> x : rights2 rest
 
-    -- testl = [Left 1, Right 2, Left 2, Right 3]
+
+    --testl = [Left 1, Right 2, Left 2, Right 3]
 
 
 
