@@ -92,5 +92,6 @@ commaSep s  = foldr1 (\s1 s2 -> s1 ++ ", " ++ s2) s
 
 -- implement prettyJSON with use of foldJSON
 -- foldJSON :: (a -> JSON -> a) -> a -> JSON -> a
+pretty:: JSON -> String
 pretty = foldJSON (\acc j -> acc ++ prettyJSON j) ""
 
