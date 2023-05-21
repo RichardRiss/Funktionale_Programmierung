@@ -1,6 +1,4 @@
 module Uebung03_01 where
-import Data.Tuple (swap)
-import Data.Semigroup (diff)
 
 {-
 #######################
