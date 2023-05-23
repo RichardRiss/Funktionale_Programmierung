@@ -62,8 +62,9 @@ complement set = \y -> not (set y)
 listToSet :: [Integer] -> IntegerSet 
 listToSet xs = \y -> elem y xs
 
-setToList :: IntegerSet -> [Integer]
+
 {-
+setToList :: IntegerSet -> [Integer]
 IntegerSet is defined as a function, because the set can potentially contain
 an infinite number of Integers there is no way to implement this function
 -}
