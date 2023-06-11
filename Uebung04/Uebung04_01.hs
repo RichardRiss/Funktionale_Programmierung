@@ -11,7 +11,7 @@ Combinatorfunctions
 
     --1.
 
-    \x y -> f (g x) y = (f . g) x y =  f . g
+    \x y -> f (g x) y = (f . g) x y =  f . g = (.)
 
 
     \f g x -> g (f x) = (g . f) x = flip (f . g) x = flip (.)
@@ -26,30 +26,26 @@ Combinatorfunctions
     ip = \x -> x
 
     -- ausformulieren
-    flip id = (\f -> \x -> \y -> f y x) (\x -> x)
+    flip id = \x y -> id y x
 
     -- einsetzen der id funktion
-    flip id = \x -> \y -> (\x -> x) y x
-
-    -- Eta Reduktion (x gebunden durch id Funktion) 
-    flip id = \x -> \y -> y x
+    \x y = y
 
 
 
-    (.) . (.)
+    --(.) . (.)
 
-    (.) = \f -> \g -> \x -> f (g x)
-    (.) = \f -> \g -> \y -> f (g y)
+    -- Nutzung der Funktionskomposition
+    (f . g) x = f (g x)
 
-    -- ausformulieren
-    (.) . (.) = (\f -> \g -> \x -> f (g x)) (\f -> \g -> \y -> f (g y))
+    ((.).(.)) f g x y = (.) ((.)f g) x y
+    = (f . g) x y
+    \f g x y = (f . g) x y
 
+    -- Eta Komposition
+    \f g x = (f . g) x
 
-    -- einsetzen der rechten (.) funktion
-    (.) . (.) = \g -> \x -> (\f -> \g -> \y -> f (g x)) (g y)
-
-    -- (g y) einsetzen
-    (.) . (.) = \g -> \x -> (\g -> \y -> (g y) (g x))
+    
 
 
 
