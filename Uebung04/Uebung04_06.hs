@@ -33,27 +33,30 @@ module Uebung04_06 where
 
     -- diamond
     -- diamond :: Int -> IO ()
-    {-
-
           
     diamond :: Int -> IO ()
     diamond 0 = return ()
     diamond 1 = putStrLn "*"
-    diamond n = diamond' n (n*2 -1)
+    diamond n = diamond' n 1 False
         where
-            diamond' n m
-                | m == 0 = do
+            diamond' n row dir
+                | row == 0 && dir = do
                     return ()
-                | m == (n*2 -1) || m == 1  = do
-                    putStrLn((replicate ((n*2 - 1) `div` 2) ' ' ++ "*" ++ replicate ((n*2 - 1)`div` 2) ' '))
-                    diamond' n (m-1)
-                | otherwise = do      
-                    putStrLn(replicate ((m `div` 2 -1)) ' ' ++ "*" ++ replicate ((m `div` 2 -1)) ' ' ++ "*" ++ replicate ((m `div` 2 -1)) ' ')
-                    diamond' n (m-1)
+                | row == 1 && not dir  = do
+                    putStrLn(replicate (n - 1) ' ' ++ "*")
+                    diamond' n (row + 1) dir
+                | row == 1 && dir = do
+                    putStrLn(replicate (n - 1) ' ' ++ "*")
+                    diamond' n (row - 1) dir
+                | row == n = do
+                    putStrLn (replicate (n - row) ' ' ++ "*" ++ replicate (row * 2 - 3) ' ' ++ "*")
+                    diamond' n (row - 1)  (not dir)
+                | dir = do
+                    putStrLn (replicate (n - row) ' ' ++ "*" ++ replicate (row * 2 - 3) ' ' ++ "*")
+                    diamond' n (row - 1) dir
+                | not dir = do
+                    putStrLn (replicate (n - row) ' ' ++ "*" ++ replicate (row * 2 - 3) ' ' ++ "*")
+                    diamond' n (row + 1) dir
 
-                    -}
-    diamond :: Int -> IO ()
-    diamond n = mapM_ (putStrLn . line) [1-n..n-1]
-        where
-            line i = let absI = abs i in replicate (n - absI) ' ' ++ replicate (2 * absI + 1) '*'
 
+                
