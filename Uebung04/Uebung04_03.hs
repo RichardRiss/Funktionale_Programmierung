@@ -14,10 +14,12 @@ module Uebung04_03 where
 
     -- 1
     instance Eq a => Eq (Rose a) where
-        (Rose i x) == (Rose j y) =    i == j && x == y
+        (==) :: Eq a => Rose a -> Rose a -> Bool
+        (==) (Rose i x) (Rose j y) = i == j && x == y
 
     instance Ord a => Ord (Rose a) where
-        compare (Rose i x) (Rose j y) = compare i j <> compare x y
+        (<=) :: Ord a => Rose a -> Rose a -> Bool
+        (<=) (Rose i x) (Rose j y) = i <= j && x <= y
 
     
 
@@ -31,18 +33,14 @@ module Uebung04_03 where
         pretty = prettyTree 0
             where
                 prettyTree :: Int -> Rose a -> String
-                prettyTree indent (Rose i [])     = indentString indent i
-                prettyTree indent (Rose i xs) = indentString indent i ++
-                    --foldr (indentString (indent + 1)) (++) xs 
-                    concatMap (prettyTree (indent + 1)) xs
+                prettyTree indent (Rose i [])     = iString indent i
+                prettyTree indent (Rose i xs)     = iString indent i ++ concatMap (prettyTree (indent + 1)) xs
 
-
-                                                
-
-                indentString n i
+                                            
+                iString n i
                     | n < 1     = pretty i ++ "\n"
                     | n == 1    = "+--" ++ pretty i ++ "\n"
-                    | n > 1     = "|    " ++ indentString (n - 1) i
+                    | n > 1     = "|    " ++ iString (n - 1) i
 
 
 

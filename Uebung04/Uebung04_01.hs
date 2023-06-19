@@ -16,7 +16,9 @@ Combinatorfunctions
 
     \f g x -> g (f x) = (g . f) x = flip (f . g) x = flip (.)
 
-    \x y -> f (g (h x y)) = f ((g . h) x y) = (f . g . h) x y = f . g . h
+    \x y -> f (g (h x y)) = (f . g) (h x y) = 
+        (f . g . h) x y = (f . g . (h x)) y = 
+             ((f . ) . ((g . ) . h))
 
 
     -- 2.
