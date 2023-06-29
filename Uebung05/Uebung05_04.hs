@@ -11,8 +11,8 @@ module Uebung05_04 where
           | Expr :+: Expr
           | Expr :*: Expr
 
-    infixl 6 :+:
-    infixl 7 :*:
+    --infixl 6 :+:
+    --infixl 7 :*:
 
     instance Show Expr where
         showsPrec _ (Val n) = shows n

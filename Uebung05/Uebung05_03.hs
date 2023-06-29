@@ -29,7 +29,7 @@ module Uebung05_03 where
     singleton :: a -> FList a
     singleton xs = toFList [xs]
 
-    cons :: a -> FList a -> FList a --, analog zu (:)
+    cons :: a -> FList a -> FList a
     cons x fl = toFList $ x: fromFList fl 
 
 
@@ -37,7 +37,7 @@ module Uebung05_03 where
     snoc fl x = toFList $ fromFList fl ++ [x]
 
     append :: FList a -> FList a -> FList a
-    append fl1 fl2 = toFList $ fromFList fl2 ++ fromFList fl1
+    append = (<>)
 
     concat' :: [FList a] -> FList a
     concat' [] = toFList []
@@ -48,7 +48,7 @@ module Uebung05_03 where
     head' fl = head $ fromFList fl
 
     tail' :: FList a -> FList a 
-    tail' fl = toFList $ tail $ fromFList fl 
+    tail' = toFList . tail . fromFList
 
     foldr' :: (a -> b -> b) -> b -> FList a -> b
     foldr' f i (FList fl) = foldr f i (fl []) 
