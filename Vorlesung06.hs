@@ -5,7 +5,7 @@ import Data.Sequence (Seq(Empty))
     {-
     3 Monadengesetze:
     (einstelliger Typkontruktur, bind, neutrales Element)
-    (m,()>>=),return)
+    (m,(>>=),return)
         return :: a -> m a
         >>= :: m a -> f (a -> m b) - m b
 
@@ -58,7 +58,7 @@ import Data.Sequence (Seq(Empty))
     1.
         return x >>= f = 
             [x] >>= f =
-                 f x ++ [] >>= f =
+                 f x ++ ([] >>= f) =
                     f x ++ [] = 
                         f x 
 
@@ -73,12 +73,12 @@ import Data.Sequence (Seq(Empty))
              xs = y:ys
              (y:ys) >>= return 
              return y ++ (ys >>= return) =
-                [y] ++ ys  wegen struktureller Integration mit Annahme für Teilliste
+                [y] ++ ys  wegen struktureller Induktion mit Annahme für Teilliste
                 = y : ys entspricht xs
     
     3. 
         (xs >>= f) >>= g
-        2 Cases in struktureller Integration
+        2 Cases in struktureller Induktion
         a.) xs = []
             ([] >>= f) >>= g =
                 [] >>= g = 
@@ -86,8 +86,41 @@ import Data.Sequence (Seq(Empty))
                         [] >>= \x -> (f >>= g) 
 
         b.) xs = y:ys
-            Übung
+            left side:
+            (y:ys >>= f) >>= g =
+                (f y ++ (ys >>= f)) >>= g = 
+                    (f y >>= g) ++ ((ys >>= f) >>= g)
+            
+            right side:
+            a >>= (\x -> f x >>= g)
+            (y:ys) >>= (\x -> f x >>= g) =
+                (f y ++ (ys >>= (\x -> f x >>= g))) =
+                    (f y >>= g) ++ (ys >>= (\x -> f x >>= g))
 
+            Um zu beweisen das recht und linke Seite gleich sind, strukturelle Induktion anwenden.
+            Man nehme zuerst den hinteren Teil.
+            Im einfachsten Fall (end case) ist nur noch eine leere Liste vorhanden und ergibt folgendes:
+            linke Seite:
+            ((ys >>= f) >>= g)
+            ([] >>= f) >>= g = [] >>= g = []
+
+            rechte Seite:
+            (ys >>= (\x -> f x >>= g))
+            ([] >>= (\x -> f x >>= g)) = []
+
+            Im Induktionsschritt n + 1 passiert das gleiche wie oben:
+            linke Seite:
+            (y:ys >>= f) >>= g = (f y ++ (ys >>= f)) >>= g 
+
+            rechte Seite:
+            (y:ys) >>= (\x -> f x >>= g) = (f y ++ (ys >>= (\x -> f x >>= g))
+
+            Es bildet sich die gleiche Struktur und für ein gleiches Verhalten für alle ys kann angenommen
+            werden, dass (ys >>= f) = ys >>= (\x -> f x >>= g)
+
+            Somit ist ((y:ys) >>= f) >>= g equivalent zu (y:ys) >>= (\x -> f x >>= g).
+
+                    
     
     -}
 
