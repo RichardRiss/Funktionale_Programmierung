@@ -76,14 +76,3 @@ u >>= \g -> (v >>= \h -> w >>= \x -> return (h x)) >>= \y -> return (g y) =
 
 u >>= \g -> v >>= \h -> w >>= \x -> return (g (h x)) = u >>= \g -> v >>= \h -> w >>= \x -> return (g (h x))
 
-
-
-
-
-
-
-
-
-
-
-
