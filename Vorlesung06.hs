@@ -192,7 +192,7 @@ import Data.Sequence (Seq(Empty))
     Nothing >>= _ = Nothing
     (Just y >>= f) = f x
 
-    instance MonadPlus Maybe wgere
+    instance MonadPlus Maybe where
         mzero = Nothing
         Nothing `mplus` my = my
         Just x `mplus` my = Just x

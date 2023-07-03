@@ -1,4 +1,4 @@
-import Control.Monad (MonadPlus (..), guard, msum) 
+import Control.Monad (MonadPlus (..)) 
 
 
 {-
@@ -47,21 +47,14 @@ solve :: MonadPlus mp => Int -> Int -> mp [Int]
 solve 0 s
     | s == 0    = return []
     | otherwise = mzero
-solve l s = monadConcat [ do
-                   xs <- solve (l-1) (s-x)
-                   if sum (x:xs) == s
-                     then return (x:xs)
-                     else mzero
-                 | x <- [0..s]]
-
-
-
+solve l s = monadConcat [return (x:xs) | x <- [0..s], xs <- solve (l-1) (s-x)]
+ 
 
 -- Test
-main :: IO ()
-main = do
+test :: IO ()
+test = do
     print(permutations [1,2,3] :: [[Int]])
-    print(solve 2 2 ::[[Int]])
+    print(solve 2 3 ::[[Int]])
 
 
 
