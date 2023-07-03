@@ -39,16 +39,20 @@ monadConcat (x:xs) = x `mplus` monadConcat xs
 
 {-
 Definiert weiter eine Funktion solve, so dass solve l s alle Listen der Länge l von natürlichen Zahlen berechnet, die sich zu s summieren lassen:
-
+solve 2 2
+[[2,0],[1,1],[0,2]]
 -}
 
 solve :: MonadPlus mp => Int -> Int -> mp [Int]
-solve 0 0 = return []
-solve l s = do
-  first <- monadConcat $ map return [0..s]
-  res <- solve (l - 1) (s - first)
-  return $ first : res
-
+solve 0 s
+    | s == 0    = return []
+    | otherwise = mzero
+solve l s = monadConcat [ do
+                   xs <- solve (l-1) (s-x)
+                   if sum (x:xs) == s
+                     then return (x:xs)
+                     else mzero
+                 | x <- [0..s]]
 
 
 
@@ -57,6 +61,7 @@ solve l s = do
 main :: IO ()
 main = do
     print(permutations [1,2,3] :: [[Int]])
+    print(solve 2 2 ::[[Int]])
 
 
 
